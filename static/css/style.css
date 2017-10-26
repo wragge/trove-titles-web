@@ -1,0 +1,9 @@
+.form-inline { margin: 20px 0 10px 0; }
+img { width: 80px; max-height: 100px; }
+.selected { background-color: rgba(24,188,156,0.2); }
+h3 {border-top: 1px solid #2c3e50; padding-top: 20px; margin-top: 40px;}
+.site-footer {
+  margin: 40px 0 100px 0;
+  border-top: 1px solid #2c3e50;
+  padding-top: 10px; }
+
