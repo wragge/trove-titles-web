@@ -23,6 +23,9 @@
   <body>
     <div class="container">
       <h1>Explore Trove&rsquo;s digitised journals</h1>
+      <p class="lead"><span class="label label-success"> {{ new_titles }} journals and {{ new_articles }} articles added since {{ last_harvest.date.strftime("%e %B %Y") }}</span>
+
+      </p>
       <p class="lead">There's lots of exciting <a href="http://trove.nla.gov.au/article/result?q=nuc%3A%22ANL%3ADL%22">new digitised content</a> being added to Trove's journals zone, but it's not always easy to find and search.</p>
       <p class="lead">This page lists journals that have been digitised by the NLA and have searchable records for individual articles. This means you can search <em>inside</em> the journal, just like you do in the newspapers zone.</p>
       <p class="lead">To search inside these journals, just click on the titles you're interested in below, then enter keywords in the search box.</p>
@@ -35,7 +38,11 @@
           <button id="trove-search" class="btn btn-primary btn-large btn-block" disabled="disabled">Search Trove</button>
           <button id="clear" class="btn btn-default btn-large btn-block">Clear everything</button>
         </div>
+
       </div>
+      <p id="status">
+          <small>Last harvested: {{ harvest.date.strftime("%e %B %Y") }}</small>
+      </p>
       <h3>Available titles</h3>
       <div id="titles">
           <div class="form-inline">
@@ -47,15 +54,18 @@
             <button class="sort btn" data-sort="startdate">
               Sort by date
             </button>
+            <button class="sort btn" id="filter-new">
+              New titles
+            </button>
           </div>
-        
+
         <ul class="list-group list">
           {% for title in titles %}
-            <li class="list-group-item clearfix" data-id="{{ title.browse_url|replace('http://nla.gov.au/', '') }}">
+            <li class="list-group-item clearfix" data-id="{{ title.browse_url|replace('http://nla.gov.au/', '') }}" data-new="{% if title.new %}yes{% else %}no{% endif %}">
               {% if title.thumbnail_url %}<img class="pull-right hidden-xs" src="{{ title.browse_url }}-t">{% endif %}
-              <h4 class="list-group-item-heading title">{{ title.title }}</h4>
+              <h4 class="list-group-item-heading title">{{ title.title }}{% if title.new %} <small class="label label-success">New!</small>{% endif %}</h4>
               {% if title.contributor %}<p class="text-muted">{{ title.contributor }}</p>{% endif %}
-              <p><span class="articles">{{ title.articles.total }}</span> articles from <span class="startdate">{% if title.articles.start %}{{ title.articles.start }}{% else %}?{% endif %}</span> to {% if title.articles.end %}{{ title.articles.end }}{% else %}?{% endif %}</p>
+              <p><span class="articles">{{ title.articles.total|humanize }}</span> articles from <span class="startdate">{% if title.articles.start %}{{ title.articles.start }}{% else %}?{% endif %}</span> to {% if title.articles.end %}{{ title.articles.end }}{% else %}?{% endif %}{% if title.articles.new %} <small class="label label-success">{{ title.articles.new|humanize }} new!</small>{% endif %}</p>
               <a class="btn btn-default btn-xs" href="{{ title.trove_url }}">More details</a> <a class="btn btn-default btn-xs" href="{{ title.browse_url }}">Browse issues</a> <a class="info btn btn-default btn-xs" href="http://trove.nla.gov.au/article/result?q=%22{{ title.browse_url|replace('http://nla.gov.au/', '') }}%22&amp;l-format=Article">List articles</a>
             </li>
           {% endfor %}

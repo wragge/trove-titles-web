@@ -1,10 +1,26 @@
 $(document).ready(function () {
 
     var options = {
-      valueNames: [ 'title', 'startdate' ]
+      valueNames: [ 'title', 'startdate', {data: ['new']} ]
     };
 
     var userList = new List('titles', options);
+
+    $("#filter-new").click(function() {
+        if (userList.filtered) {
+            userList.filter();
+            $(this).text('New titles');
+        } else {
+            userList.filter(function(item) {
+                if (item.values().new == 'yes') {
+                   return true;
+                } else {
+                   return false;
+                }
+            });
+            $(this).text('All titles');
+        }
+    });
 
     function updateSelected() {
         var numSelected = $(".selected").length;
